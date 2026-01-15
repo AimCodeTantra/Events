@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events & Projects | Robotics Club</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    
+    <style>
+        /* ============================================================
+           STRICT ORIGINAL PC STYLES (FROM EVENTS.CSS)
+           ============================================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-image: linear-gradient(#47084b, #081e7a);
+            background-attachment: fixed;
+            background-size: cover;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 30px; position: fixed; top: 0; left: 0;
+            width: 100%; backdrop-filter: blur(20px); z-index: 2000; height: 80px;
+        }
+
+        .nav-items { display: flex; gap: 15px; }
+
+        .card {
+            text-decoration: none; color: white; font-size: 13px; font-weight: 500;
+            padding: 8px 16px; background-color: rgba(22, 26, 32, 0.8);
+            border-radius: 50px; position: relative; transition: 0.3s; z-index: 1;
+        }
+
+        .card::after {
+            content: ''; position: absolute; inset: -2px; border-radius: 50px;
+            background: linear-gradient(45deg, #008cff, #e100ff, #008cff);
+            background-size: 200% 200%; z-index: -1; opacity: 0; transition: 0.5s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+        .card:hover::after { opacity: 1; animation: borderFlow 3s linear infinite; }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        #main-content { padding: 100px 5% 50px; max-width: 1400px; margin: auto; }
+        .section { margin-bottom: 80px; }
+        .title { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 30px; }
+        .title span { color: #008cff; }
+
+        /* UPCOMING SLIDER */
+        .slider-container { position: relative; height: 500px; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 50px rgba(0,0,0,0.5); }
+        .slide .item {
+            width: 180px; height: 250px; position: absolute; top: 75%; transform: translateY(-50%);
+            border-radius: 15px; background-size: cover; background-position: center;
+            transition: 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .slide .item:nth-child(1), .slide .item:nth-child(2) {
+            top: 0; left: 0; width: 100%; height: 100%; border-radius: 0; transform: none;
+        }
+        .slide .item:nth-child(3) { left: 55%; }
+        .slide .item:nth-child(4) { left: calc(55% + 200px); }
+        .slide .item:nth-child(5) { left: calc(55% + 400px); }
+
+        .item .content {
+            position: absolute; top: 50%; left: 80px; width: 450px; transform: translateY(-50%);
+            display: none; background: rgba(0,0,0,0.6); padding: 30px; border-radius: 15px;
+        }
+        .slide .item:nth-child(2) .content { display: block; }
+        .content .name { font-size: 50px; font-weight: bold; color: #008cff; }
+
+        /* PROJECT CARDS */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .proj-card { background: rgba(22, 26, 32, 0.8); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .proj-card img { width: 100%; height: 200px; object-fit: cover; }
+        .progress-bar { background: #333; height: 8px; border-radius: 4px; margin: 15px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #008cff, #e100ff); }
+
+        /* GALLERY */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .gallery-item { position: relative; height: 280px; border-radius: 15px; overflow: hidden; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .gallery-overlay {
+            position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0, 140, 255, 0.9));
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; opacity: 0; transition: 0.4s;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+        .button-nav { position: absolute; bottom: 30px; width: 100%; text-align: center; }
+        .button-nav button {
+            width: 50px; height: 50px; border-radius: 50%; background: rgba(24, 3, 3, 0.703);
+            color: white; border: 3px solid white; cursor: pointer; margin: 0 10px;
+        }
+
+        /* ORIGINAL FOOTER STYLES */
+        .footer {
+            width: 100%; background: rgba(23, 23, 23, 0.745); backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 80px 0 60px;
+        }
+        .footer .container {
+            max-width: 1200px; margin: 0 auto; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 0 20px;
+        }
+        .footer-column { text-align: center; }
+        .footer_col3_links { font-size: 15px; list-style: none; margin-top: 15px; }
+        .footer_col3_links li { margin-bottom: 8px; }
+        .media-icons { display: flex; justify-content: center; gap: 15px; list-style: none; margin-top: 20px; }
+        .media-icons a { color: white; transition: 0.3s; }
+        .footer-bottom { text-align: center; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; }
+
+        /* ============================================================
+           HAMBURGER MENU & MOBILE LAYER
+           ============================================================ */
+        .hamburger { display: none; cursor: pointer; background: none; border: none; color: white; font-size: 24px; z-index: 2001; }
+
+        @media (max-width: 992px) {
+            .hamburger { display: block; }
+            .nav-items {
+                position: fixed; top: 0; right: -100%; width: 250px; height: 100vh;
+                background: rgba(22, 26, 32, 0.95); backdrop-filter: blur(20px);
+                flex-direction: column; align-items: center; justify-content: center;
+                transition: 0.4s; z-index: 2000;
+            }
+            .nav-items.active { right: 0; }
+            .contact-btn { display: none; }
+            .slider-container { height: 400px; }
+            .item .content { left: 5%; width: 90%; padding: 20px; }
+            .content .name { font-size: 30px; }
+            .slide .item:nth-child(3), .slide .item:nth-child(4) { display: none; }
+        }
+
+        /* APPEAR ON SCROLL CLASSES */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0px); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <div class="logo-container">
+                <img src="images/logo.png" height="60px" alt="Logo">
+            </div>
+            <button class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+            <div class="nav-items" id="navItems">
+                <a href="home.html" class="card">Home</a>
+                <a href="about.html" class="card">About</a>
+                <a href="#" class="card">Projects</a>
+                <a href="#" class="card">Events</a>
+                <a href="#" class="card">Team</a>
+                <a href="#" class="card">News</a>
+                <a href="#" class="card">Achievements</a>
+            </div>
+            <div class="contact-btn">
+                <a href="#" class="card">Contacts</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <section class="section">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <h2 class="title">Upcoming <span>Events</span></h2>
+                <div style="margin-bottom: 30px;">
+                    <label>Sort By:</label>
+                    <select id="sortEvents" style="background:transparent; color:white; border:1px solid #008cff; border-radius:5px;">
+                        <option value="date">Date</option>
+                        <option value="name">Name</option>
+                    </select>
+                </div>
+            </div>
+            <div class="slider-container">
+                <div class="slide" id="eventSlider"></div>
+                <div class="button-nav">
+                    <button class="prev"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button class="next"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="title">Ongoing <span>Projects</span></h2>
+            <div class="project-grid" id="projectGrid"></div>
+        </section>
+
+        <section class="section">
+            <h2 class="title">Past <span>Gallery</span></h2>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
+                <button class="filter-btn card active" data-filter="all">All</button>
+                <button class="filter-btn card" data-filter="Workshops">Workshops</button>
+                <button class="filter-btn card" data-filter="Competitions">Competitions</button>
+                <button class="filter-btn card" data-filter="Lectures">Guest Lectures</button>
+                <button class="filter-btn card" data-filter="Social">Social Events</button>
+            </div>
+            <div class="gallery-grid" id="pastGallery"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+          <div id="col1" class="footer-column">
+            <img src="images/logo.png" alt="" height="95px">
+            <h1>Robotics Club <br> NIT Patna</h1>
+            <p><i class="fa-solid fa-location-dot"></i> Ashok Rajpath, NIT Patna - 800005</p>
+          </div>
+  
+          <div id="col2" class="footer-column">
+            <h3>Quick Links</h3>
+            <ul style="list-style:none; margin-top:15px;">
+              <li><a href="home.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">Home</a></li>
+              
+              <li><a href="about.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">About</a></li>
+              <li><a href="projects.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">Projects</a></li>
+              <li><a href="events.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">Events</a></li>
+              <li><a href="team.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">Team</a></li>
+              <li><a href="news.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">News</a></li>
+              <li><a href="achievements.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">Achievements</a></li>
+              <li><a href="contacts.html" style="text-decoration:none; color:rgba(255,255,255,0.6);">Contacts</a></li>
+            </ul>
+          </div>
+
+          <div id="col3" class="footer-column">
+            <img src="images/NITPatna_Logo.png" alt="" height="100px">
+            <ul class="footer_col3_links">
+              <li><p><i class="fa-solid fa-phone"></i> 0612-2371715</p></li>
+              <li><p><i class="fa-regular fa-envelope"></i> info@nitp.ac.in</p></li>
+              <li><p><i class="fa-solid fa-globe"></i> www.nitp.ac.in</p></li>
+            </ul>
+            <ul class="media-icons">
+              <li><a href="https://x.com/NITPatna1" target="_blank"><i class="fa-brands fa-twitter"></i></a></li>
+              <li><a href="https://www.facebook.com/nitpatna/" target="_blank"><i class="fa-brands fa-facebook"></i></a></li>
+              <li><a href="https://www.linkedin.com/company/nit-patna" target="_blank"><i class="fa-brands fa-linkedin"></i></a></li>
+              <li><a href="#"><i class="fa-regular fa-envelope"></i></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>©2024 Robotics Club NIT Patna - All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger Toggle Logic
+        const hamburger = document.getElementById('hamburger');
+        const navItems = document.getElementById('navItems');
+        hamburger.onclick = () => navItems.classList.toggle('active');
+
+        // RESTORED ORIGINAL CONTENT
+        const upcomingEvents = [
+            { name: "Robo-Sumo 2026", date: "2026-03-15", time: "10:00 AM", img: "images/robo_sumo.png", des: "Heavyweight battle-bot tournament." },
+            { name: "AI Vision Workshop", date: "2026-02-10", time: "02:00 PM", img: "images/ai_lab.png", des: "Learning real-time object detection." },
+            { name: "Drone Race", date: "2026-05-20", time: "09:00 AM", img: "images/drone_race.png", des: "High-speed autonomous racing." },
+            { name: "NASA Guest Talk", date: "2026-04-05", time: "05:00 PM", img: "images/nasa_summit.png", des: "Talk on Mars Rover mechanics." }
+        ];
+
+        const ongoingProjects = [
+            { title: "Hexapod Explorer", progress: 75, img: "images/hexa.png", des: "LiDAR-based terrain mapping robot." },
+            { title: "Bionic Prosthetic", progress: 40, img: "images/bionic.png", des: "EMG sensor controlled robotic arm." }
+        ];
+
+        const pastGallery = [
+            { name: "Arduino 101", cat: "Workshops", date: "Oct 2025", img: "images/aurdino.png", des: "Basic electronics session." },
+            { name: "National Combat", cat: "Competitions", date: "Dec 2025", img: "images/combat.png", des: "30kg bot tournament." },
+            { name: "Future of Robotics", cat: "Lectures", date: "Jan 2026", img: "images/future.png", des: "Guest talk by Boston Dynamics." },
+            { name: "Club Mixer", cat: "Social Events", date: "Nov 2025", img: "images/club.png", des: "Networking night." },
+            { name: "PCB Design", cat: "Workshops", date: "Aug 2025", img: "images/pcb.png", des: "Professional circuit layout." },
+            { name: "Maze Solver", cat: "Competitions", date: "July 2025", img: "images/maze.png", des: "Autonomous bot race." }
+        ];
+
+        function init() {
+            renderUpcoming(upcomingEvents);
+            renderProjects();
+            renderGallery('all');
+            setInterval(moveNext, 3000);
+            handleScrollReveal();
+        }
+
+        function renderUpcoming(data) {
+            document.getElementById('eventSlider').innerHTML = data.map(ev => `
+                <div class="item" style="background-image: url(${ev.img});">
+                    <div class="content">
+                        <div class="name">${ev.name}</div>
+                        <p>${ev.des}</p>
+                        <button onclick="location.href='register.html'" style="margin-top:15px; padding:10px 20px; background:#008cff; color:white; border:none; border-radius:5px; cursor:pointer;">Register</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            document.getElementById('projectGrid').innerHTML = ongoingProjects.map(p => `
+                <div class="proj-card reveal">
+                    <img src="${p.img}">
+                    <div style="padding:20px;">
+                        <h3>${p.title}</h3>
+                        <div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%"></div></div>
+                        <span>Status: ${p.progress}% Complete</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGallery(filter) {
+            const filtered = filter === 'all' ? pastGallery : pastGallery.filter(e => e.cat.includes(filter));
+            document.getElementById('pastGallery').innerHTML = filtered.map(e => `
+                <div class="gallery-item reveal">
+                    <img src="${e.img}">
+                    <div class="gallery-overlay">
+                        <span style="color:#008cff; font-size:11px;">${e.cat}</span>
+                        <h4>${e.name}</h4>
+                        <p>${e.date} - ${e.des}</p>
+                    </div>
+                </div>
+            `).join('');
+            handleScrollReveal();
+        }
+
+        function moveNext() {
+            let items = document.querySelectorAll('.item');
+            if (items.length > 0) document.getElementById('eventSlider').appendChild(items[0]);
+        }
+
+        document.querySelector('.next').onclick = moveNext;
+        document.querySelector('.prev').onclick = () => {
+            let items = document.querySelectorAll('.item');
+            document.getElementById('eventSlider').prepend(items[items.length - 1]);
+        };
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.onclick = function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderGallery(this.getAttribute('data-filter'));
+            };
+        });
+
+        function handleScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
